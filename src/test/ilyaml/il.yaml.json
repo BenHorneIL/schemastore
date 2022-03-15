@@ -1,11 +1,11 @@
 {
   "meta": {
-    "team": "ben",
+    "owner": "ben",
     "trackingId": "87b2338d-3ea4-45cc-bd63-73d1f4a73a6c"
   },
-  "catalog": {
-    "obj1": "ben"
-  },
+  "catalog": [
+    "ben"
+  ],
   "otk": {
     "build": true
   },

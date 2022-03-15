@@ -21,15 +21,15 @@
       "description": "The meta data about this repo.",
       "type": "object",
       "properties": {
-        "team": {
-          "$ref": "#/definitions/team"
+        "owner": {
+          "$ref": "#/definitions/owner"
         },
         "trackingId":{
           "$ref": "#/definitions/trackingId"
         }
       }
     },
-    "team":{
+    "owner":{
       "description": "The Engineering team that is responsible for this repo.",
       "type": "string"
     },
@@ -43,7 +43,10 @@
     },
     "catalog": {
       "description": "The Backstage definition for this repo",
-      "type": "object"
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
     },
     "otk": {
       "description": "The OTK definition for this repo",
