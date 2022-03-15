@@ -68,6 +68,10 @@
     "fileChecker": {
       "description": "The SpartanzBot definition for this repo",
       "type": "object",
+      "required":[
+        "enabled",
+        "comment"
+      ],
       "properties": {
         "enabled":{
           "$ref": "#/definitions/enabled"
