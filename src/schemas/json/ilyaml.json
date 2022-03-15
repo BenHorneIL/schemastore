@@ -87,7 +87,11 @@
     },
     "comment": {
       "description": "The SpartanzBot comment to make on the PR",
-      "type": "string"
+      "type": "boolean",
+      "enum": [
+        true,
+        false
+      ]
     }
   }
 }

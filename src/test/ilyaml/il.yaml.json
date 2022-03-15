@@ -12,7 +12,7 @@
   "spartanzBot": {
     "fileChecker": {
       "enabled": true,
-      "comment": "doh"
+      "comment": true
     }
   }
 }
