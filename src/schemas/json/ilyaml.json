@@ -20,6 +20,10 @@
     "meta":{
       "description": "The meta data about this repo.",
       "type": "object",
+      "required":[
+        "owner",
+        "trackingId"
+      ],
       "properties": {
         "owner": {
           "$ref": "#/definitions/owner"
