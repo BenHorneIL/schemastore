@@ -1,0 +1,86 @@
+{
+  "title": "JSON schema for IL config files",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "meta": {
+      "$ref": "#/definitions/meta"
+    },
+    "catalog": {
+      "$ref": "#/definitions/catalog"
+    },
+    "otk": {
+      "$ref": "#/definitions/otk"
+    },
+    "spartanzBot": {
+      "$ref": "#/definitions/spartanzBot"
+    }
+  },
+  "definitions":{
+    "meta":{
+      "description": "The meta data about this repo.",
+      "type": "object",
+      "properties": {
+        "team": {
+          "$ref": "#/definitions/team"
+        },
+        "trackingId":{
+          "$ref": "#/definitions/trackingId"
+        }
+      }
+    },
+    "team":{
+      "description": "The Engineering team that is responsible for this repo.",
+      "type": "string"
+    },
+    "trackingId":{
+      "description": "The tracking ID for the repo",
+      "type": "string",
+      "enum": [
+        "87b2338d-3ea4-45cc-bd63-73d1f4a73a6c",
+        "a4da8ae0-58b3-4739-be81-9b0d6537a6c5"
+      ]
+    },
+    "catalog": {
+      "description": "The Backstage definition for this repo",
+      "type": "object"
+    },
+    "otk": {
+      "description": "The OTK definition for this repo",
+      "type": "object"
+    },
+    "spartanzBot": {
+      "description": "The SpartanzBot definition for this repo",
+      "type": "object",
+      "properties": {
+        "fileChecker":{
+          "$ref": "#/definitions/fileChecker"
+        }
+      }
+    },
+    "fileChecker": {
+      "description": "The SpartanzBot definition for this repo",
+      "type": "object",
+      "properties": {
+        "enabled":{
+          "$ref": "#/definitions/enabled"
+        },
+        "comment":{
+          "$ref": "#/definitions/comment"
+        }
+      }
+    },
+    "enabled": {
+      "description": "The SpartanzBot definition for this repo",
+      "type": "boolean",
+      "enum": [
+        true,
+        false
+      ]
+    },
+    "comment": {
+      "description": "The SpartanzBot comment to make on the PR",
+      "type": "string"
+    }
+  }
+}

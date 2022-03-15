@@ -4161,6 +4161,14 @@
       "description": "Schema for unist syntax trees",
       "fileMatch": [],
       "url": "https://json.schemastore.org/unist.json"
+    },
+    {
+      "name": "ilyaml",
+      "description": "Schema for il config",
+      "fileMatch": [
+        "il.yaml"
+      ],
+      "url": "https://json.schemastore.org/ilyaml.json"
     }
   ]
 }
