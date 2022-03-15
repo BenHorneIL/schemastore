@@ -1,12 +1,20 @@
 {
+  "version": "1.0",
   "meta": {
+    "owner": "spartan-sre",
     "trackingId": "87b2338d-3ea4-45cc-bd63-73d1f4a73a6c"
   },
   "catalog": [
     "ben"
   ],
   "otk": {
-    "build": true
+    "image": "dotnet6",
+    "analysis": {
+      "enabled": true
+    },
+    "pr": {
+      "enabled": false
+    }
   },
   "spartanzBot": {
     "fileChecker": {

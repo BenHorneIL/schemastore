@@ -4168,7 +4168,10 @@
       "fileMatch": [
         "il.yaml"
       ],
-      "url": "https://json.schemastore.org/ilyaml.json"
+      "url": "https://json.schemastore.org/ilyaml-1.0.json",
+      "versions": {
+        "1.0": "https://json.schemastore.org/ilyaml-1.0.json"
+      }
     }
   ]
 }
