@@ -1,0 +1,92 @@
+{
+  "version": "1.0",
+  "meta": {
+    "owner": "spartan-sre",
+    "trackingId": "87b2338d-3ea4-45cc-bd63-73d1f4a73a6c"
+  },
+  "catalog": [
+    {
+      "apiVersion": "v1",
+      "kind": "Component1",
+      "metadata": {
+        "name": "name",
+        "title": "title",
+        "description": "description",
+        "tags": [
+          "tag1"
+        ],
+        "annotations": {
+          "github.com/project-slug": "ImagineLearning/myrepo"
+        },
+        "labels": {
+          "key": "value",
+          "key2": "value2"
+        },
+        "links": [
+          {
+            "url": "url",
+            "title": "title"
+          }
+        ]
+      },
+      "spec": {
+        "owner": "ben",
+        "lifecycle": "production"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Component2",
+      "metadata": {
+        "name": "name",
+        "title": "title",
+        "description": "description",
+        "tags": [
+          "tag2"
+        ],
+        "annotations": {
+          "github.com/project-slug": "ImagineLearning/myrepo"
+        },
+        "labels": {
+          "key": "value"
+        }
+      },
+      "spec": {
+        "owner": "ben",
+        "lifecycle": "production"
+      }
+    }
+  ],
+  "otk": {
+    "image": "dotnet6",
+    "type": "dotnet",
+    "schedule": {
+      "cron": "1 2 3 4 5"
+    },
+    "worker_tags": [
+      "debian9"
+    ],
+    "env": [
+      { 
+        "key": "MY_VAR",
+        "value": "MY_VALUE"
+      },
+      { 
+        "key": "MY_VAR2",
+        "value": "MY_VALUE2"
+      }
+    ],
+    "analysis": {
+      "enabled": true
+    },
+    "pr": {
+      "enabled": false
+    }
+  },
+  "spartanzBot": {
+    "fileChecker": {
+      "enabled": true,
+      "comment": true
+    }
+  }
+}

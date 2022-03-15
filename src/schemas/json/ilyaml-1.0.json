@@ -1,0 +1,189 @@
+{
+  "title": "JSON schema for IL config files",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "version": {
+      "$ref": "#/definitions/version"
+    },
+    "meta": {
+      "$ref": "#/definitions/meta"
+    },
+    "catalog": {
+      "$ref": "#/definitions/catalog"
+    },
+    "otk": {
+      "$ref": "#/definitions/otk"
+    },
+    "spartanzBot": {
+      "$ref": "#/definitions/spartanzBot"
+    }
+  },
+  "definitions":{
+    "version":{
+      "description": "The version of the template to use",
+      "type": "string",
+      "enum": [
+        "1.0"
+      ]
+    },
+    "meta":{
+      "description": "The meta data about this repo.",
+      "type": "object",
+      "required":[
+        "owner",
+        "trackingId"
+      ],
+      "properties": {
+        "owner": {
+          "$ref": "#/definitions/owner"
+        },
+        "trackingId":{
+          "$ref": "#/definitions/trackingId"
+        }
+      }
+    },
+    "owner":{
+      "description": "The Engineering team that is responsible for this repo.",
+      "type": "string"
+    },
+    "trackingId":{
+      "description": "The tracking ID for the repo",
+      "type": "string",
+      "enum": [
+        "87b2338d-3ea4-45cc-bd63-73d1f4a73a6c",
+        "a4da8ae0-58b3-4739-be81-9b0d6537a6c5"
+      ]
+    },
+    "catalog": {
+      "description": "The Backstage definition for this repo",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "otk": {
+      "description": "The OTK definition for this repo",
+      "type": "object",
+      "properties": {
+        "image":{
+          "$ref": "#/definitions/image"
+        },
+        "type":{
+          "$ref": "#/definitions/type"
+        },
+        "schedule":{
+          "$ref": "#/definitions/schedule"
+        },
+        "worker_tags":{
+          "$ref": "#/definitions/worker_tags"
+        },
+        "env":{
+          "$ref": "#/definitions/env"
+        },
+        "analysis":{
+          "$ref": "#/definitions/analysis"
+        },
+        "pr":{
+          "$ref": "#/definitions/pr"
+        }
+      }
+    },
+    "image":{
+      "description": "The type of image that will be used to build. If not set, it will be automatically detected.",
+      "type": "string",
+      "enum": ["awscli","base","dotnet21","dotnet31","dotnet5","dotnet6","helm","hugo-site","jdk8","jdk11","jdk13","jdk14","jdk15","jdk16","jdk17","npm-node12","npm-node13","npm-node14","npm-node16","npm-browsers","python","ruby"]
+    },
+    "type":{
+      "description": "The build language to use in place of autodetection. If not set, it will be automatically detected.",
+      "type": "string",
+      "enum":["dotnet","gradle","jvm","maven","npm","pre-built","python","ruby","yarn"]
+    },
+    "schedule":{
+      "description": "Configure a pipeline to trigger on a schedule, by specifying a cron expression.",
+      "type": "object",
+      "properties": {
+        "cron":{
+          "$ref": "#/definitions/cron"
+        }
+      }
+    },
+    "cron":{
+      "description": "The Cron expressions",
+      "type": "string"
+    },
+    "worker_tags":{
+      "description": "If your build has a specific worker requirement, you can express that in the form of worker_tags",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "env":{
+      "description": "You can provide custom ENV vars which will be exported into the build shell",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "analysis":{
+      "description": "For building certain types of projects such as open source libraries, it doesn't make sense to analyze them in our internal Sonar instance",
+      "type": "object",
+      "properties": {
+        "enabled":{
+          "$ref": "#/definitions/enabled"
+        }
+      }
+    },
+    "pr":{
+      "description": "Enable or disable build checks during Pull Requests",
+      "type": "object",
+      "properties": {
+        "enabled":{
+          "$ref": "#/definitions/enabled"
+        }
+      }
+    },
+    "spartanzBot": {
+      "description": "The SpartanzBot definition for this repo",
+      "type": "object",
+      "properties": {
+        "fileChecker":{
+          "$ref": "#/definitions/fileChecker"
+        }
+      }
+    },
+    "fileChecker": {
+      "description": "The SpartanzBot definition for this repo",
+      "type": "object",
+      "required":[
+        "enabled",
+        "comment"
+      ],
+      "properties": {
+        "enabled":{
+          "$ref": "#/definitions/enabled"
+        },
+        "comment":{
+          "$ref": "#/definitions/comment"
+        }
+      }
+    },
+    "enabled": {
+      "description": "The SpartanzBot definition for this repo",
+      "type": "boolean",
+      "enum": [
+        true,
+        false
+      ]
+    },
+    "comment": {
+      "description": "The SpartanzBot comment to make on the PR",
+      "type": "boolean",
+      "enum": [
+        true,
+        false
+      ]
+    }
+  }
+}
