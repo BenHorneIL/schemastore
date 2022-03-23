@@ -10,7 +10,7 @@
           "org": "org",
           "lob": "lob",
           "cluster": "cluster",
-          "env": "env"
+          "env": "prod"
         },
         "namespace": {
           
