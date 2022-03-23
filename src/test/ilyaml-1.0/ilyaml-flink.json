@@ -1,0 +1,60 @@
+{
+  "version": "1.0",
+  "otk": {
+    "deploy": [
+      {
+        "global": {
+          "team": "team",
+          "name": "name",
+          "type": "flink_job"
+        },
+        "deployment": {
+          "flink": {
+            "version": "1.11.0",
+            "jobJar": "/opt/flink/job/flink-job.jar",
+            "parallelism": 1,
+            "plugins": [
+              "flink-s3"
+            ],
+            "autoSavepointSeconds": 300,
+            "takeSavepointOnUpgrade": true,
+            "fromSavepoint": "",
+            "isReplay": false,
+            "state": {
+              "bucket": "flink-state-bucket",
+              "prefix": "flink/"
+            },
+            "jobmanager": {
+              "properties": {
+              },
+              "resources": {
+                "limits": {
+                  "cpu": "1000m",
+                  "memory": "1536Mi"
+                },
+                "requests": {
+                  "cpu": "1000m",
+                  "memory": "1536Mi"
+                }
+              }
+            },
+            "taskmanager": {
+              "properties": {
+              },
+              "resources": {
+                "limits": {
+                  "cpu": "1000m",
+                  "memory": "1536Mi"
+                },
+                "requests": {
+                  "cpu": "1000m",
+                  "memory": "1536Mi"
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}

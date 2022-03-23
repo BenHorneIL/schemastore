@@ -1,0 +1,46 @@
+{
+  "version": "1.0",
+  "otk": {
+    "deploy": [
+      {
+        "global": {
+          "team": "team",
+          "name": "name",
+          "type": "job"
+        },
+        "static_website": {
+          "hosts": [
+            {
+              
+              "suffix": "-app.domain",
+              "domain": "full.qualified.domain"
+
+            }
+          ],
+          "context_root": "/",
+          "rewrites": [
+            {
+              "uri": {
+                "prefix": "",
+                "exact": ""
+              },
+              "rewrite": {
+                "uri": ""
+              }
+            }
+          ],
+          "uptime_check": {
+            "enabled": true,
+            "type": "HTTP",
+            "method": "GET",
+            "path": "",
+            "auth_type": "BASIC",
+            "post_type": "key-value",
+            "post_content_type": "text/html",
+            "interval": 60
+          }
+        }
+      }
+    ]
+  }
+}

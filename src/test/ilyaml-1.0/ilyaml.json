@@ -6,8 +6,8 @@
   },
   "catalog": [
     {
-      "apiVersion": "v1",
-      "kind": "Component1",
+      "apiVersion": "backstage.io/v1alpha1",
+      "kind": "Component",
       "metadata": {
         "name": "name",
         "title": "title",
@@ -24,19 +24,22 @@
         },
         "links": [
           {
-            "url": "url",
-            "title": "title"
+            "url": "url1",
+            "title": "title1"
           }
         ]
       },
       "spec": {
         "owner": "ben",
-        "lifecycle": "production"
+        "lifecycle": "production",
+        "type": "service",
+        "dependsOn":["component:cpm1"],
+        "providesApis":["api1"]
       }
     },
     {
-      "apiVersion": "v1",
-      "kind": "Component2",
+      "apiVersion": "backstage.io/v1alpha1",
+      "kind": "Component",
       "metadata": {
         "name": "name",
         "title": "title",
@@ -49,11 +52,20 @@
         },
         "labels": {
           "key": "value"
-        }
+        },
+        "links": [
+          {
+            "url": "url2",
+            "title": "title2"
+          }
+        ]
       },
       "spec": {
         "owner": "ben",
-        "lifecycle": "production"
+        "lifecycle": "production",
+        "type": "service",
+        "dependsOn":["component:cpm1"],
+        "providesApis":["api1"]
       }
     }
   ],

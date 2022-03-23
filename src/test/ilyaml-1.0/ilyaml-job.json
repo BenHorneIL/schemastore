@@ -1,0 +1,28 @@
+{
+  "version": "1.0",
+  "otk": {
+    "deploy": [
+      {
+        "global": {
+          "team": "team",
+          "name": "name",
+          "type": "job"
+        },
+        "deployment": {
+          "job": {
+            "backoffLimit": 6,
+            "completions": 1,
+            "activeDeadlineSeconds": 7200,
+            "progressDeadlineSeconds": 7200,
+            "parallelism": 1,
+            "ttlSecondsAfterFinished": 10800,
+            "schedule": "1 2 3 4 5",
+            "startingDeadlineSeconds": 20,
+            "concurrencyPolicy": "Forbid",
+            "restartPolicy": "OnFailure"
+          }
+        }
+      }
+    ]
+  }
+}

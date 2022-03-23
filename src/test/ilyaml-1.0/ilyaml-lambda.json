@@ -1,0 +1,40 @@
+{
+  "version": "1.0",
+  "otk": {
+    "deploy": [
+      {
+        "global": {
+          "team": "team",
+          "name": "name",
+          "type": "lambda"
+        },
+        "lambda": {
+          "runtime": "",
+          "handler": "",
+          "packageDir": "",
+          "batchSize": 1,
+          "maxBatchingWindowSecs": 0,
+          "bisectBatchOnError": false,
+          "maxRecordAgeSecs": -1,
+          "maxRetryAttempts": -1,
+          "parallelizationFactor": 1,
+          "tumblingWindowSecs": -1,
+          "deadLetterTarget": "arn:aws:sqs:...",
+          "onFailureTarget": "arn:aws:sqs:...",
+          "onSuccessTarget": "arn:aws:sqs:...",
+          "reservedConcurrentExecutions": 1,
+          "resources": {
+            "memoryMb": 32
+          },
+          "env": {
+            "MY_KEY": "myval",
+            "MY_KEY2": "myval2"
+          },
+          "timeout": 5,
+          "tracing": "PassThrough",
+          "triggers": ["arn:aws:kinesis:..."]
+        }
+      }
+    ]
+  }
+}

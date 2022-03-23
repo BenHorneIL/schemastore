@@ -1,0 +1,30 @@
+{
+  "version": "1.0",
+  "otk": {
+    "deploy": [
+      {
+        "global": {
+          "team": "team",
+          "name": "name",
+          "type": "cdn"
+        },
+        "cdn": {
+          "local_dir": "dir",
+          "prefix": "/dir",
+          "version": "from_package_json"
+        }
+      },
+      {
+        "global": {
+          "team": "team",
+          "name": "name",
+          "type": "cdn"
+        },
+        "cdn": {
+          "local_dir": "dir",
+          "prefix": "/dir"
+        }
+      }
+    ]
+  }
+}

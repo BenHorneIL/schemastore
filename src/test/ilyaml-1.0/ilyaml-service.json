@@ -1,0 +1,259 @@
+{
+  "version": "1.0",
+  "otk": {
+    "deploy": [
+      {
+        "global": {
+          "team": "team",
+          "name": "name",
+          "type": "service",
+          "service": {
+            "port": 8080,
+            "adminPort": 8081
+          },
+          "monitoring": {
+            "endpoint": {
+              "path": "/actuator/prometheus",
+              "port": "8081",
+              "interval": "15s"
+            },
+            "rules": [
+
+            ]
+          }
+        },
+        "deployment": {
+          "image": {
+            "cmd": "command",
+            "argLine": "argsLine",
+            "args": [
+
+            ],
+            "build": {
+              "contextRoot": "."
+            }
+          },
+          "replicaCount": 1,
+          "autoscaling": {
+            "enabled": true,
+            "minReplicas": 2,
+            "maxReplicas": 3,
+            "targetCPUUtilizationPercentage": 80,
+            "targetMemoryUtilizationPercentage": 80
+          },
+          "terminationGracePeriodSeconds": 30,
+          "healthCheck": {
+            "execCommand": [
+
+            ],
+            "path": "/actuator/health",
+            "port": 8081,
+            "initialDelaySeconds": 20,
+            "periodSeconds": 10,
+            "failureThreshold": 6,
+            "livenesss": {
+              "execCommand": [
+
+              ],
+              "path": "/actuator/health/liveness",
+              "port": 8081,
+              "initialDelaySeconds": 0,
+              "periodSeconds": 10,
+              "failureThreshold": 3
+            },
+            "readiness": {
+              "execCommand": [
+
+              ],
+              "path": "/actuator/health/readiness",
+              "port": 8081,
+              "initialDelaySeconds": 0,
+              "periodSeconds": 10,
+              "failureThreshold": 3
+            }
+          },
+          "env": {
+            "instance": [
+              {
+                "name": "key1",
+                "value": "value1"
+              },
+              {
+                "name": "key2",
+                "value": "value2"
+              }
+            ]
+          },
+          "resources": {
+            "limits": {
+              "cpu": "100m",
+              "memory": "128Mi"
+            },
+            "requests": {
+              "cpu": "100m",
+              "memory": "128Mi"
+            }
+          },
+          "nodeSelector": {
+          },
+          "tolerations": [
+
+          ],
+          "affinity": {
+          }
+        },
+        "destinationrule": {
+          "trafficPolicy": {
+            "loadBalancer": {
+              "consistentHash": {
+                "httpCookie": {
+                  "name": "user",
+                  "ttl": "0s"
+                }
+              }
+            },
+            "connectionPool": {
+              "tcp": {
+                "maxConnections": 100,
+                "connectTimeout": "30ms",
+                "tcpKeepalive": {
+                  "time": "7200s",
+                  "interval": "75s"
+                }
+              }
+            },
+            "outlierDetection": {
+              "consecutive5xxErrors": 7,
+              "interval": "5m",
+              "baseEjectionTime": "15m"
+            }
+          }
+        },
+        "virtualservice": {
+          "gateway": {
+            "enabled": false,
+            "gateway": [
+              "public",
+              "ineternal"
+            ],
+            "hosts": [
+              "*"
+            ],
+            "httpRoutes": [
+              {
+                "uri": {
+                  "prefix": "/api/"
+                }
+              },
+              {
+                "uri": {
+                  "exact": "/api"
+                }
+              }
+            ],
+            "rewrite": {
+              "uri": "/",
+              "authority": ""
+            },
+            "headers": {
+              "request": {
+                "set": {
+                  "x-forwarded-proto": "https"
+                }
+              }
+            },
+            "timeout": {
+            },
+            "retries": {
+            },
+            "fault": {
+            },
+            "corsPolicy": {
+              "allowOrigins": [
+                {
+                  "exact": "https://example.com"
+                }
+              ],
+              "allowMethods": [
+                "POST",
+                "GET",
+                "PUT",
+                "OPTIONS"
+              ],
+              "allowHeaders": [
+                "Content-Type",
+                "Accept",
+                "Authorization"
+              ]
+            }
+          },
+          "auth": {
+            "enabled": false,
+            "jwt": [
+              {
+                "issuer": "issuer",
+                "outputPayloadToHeader": "X-Request-Auth-Payload"
+              }
+            ],
+            "policies": [
+              {
+                "action": "ALLOW",
+                "rules": [
+                  {
+                    "to": [
+                      {
+                        "operation": null,
+                        "notHosts": [
+                          "example.com"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "from": [
+                      {
+                        "source": null,
+                        "requestPrincipals": [
+                          "example.com"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "to": [
+                      {
+                        "operation": null,
+                        "hosts": [
+                          "example.com"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "uptimeCheck": {
+            "enabled": false,
+            "type": "HTTP",
+            "method": "GET",
+            "host": "hostname.app",
+            "path": "/path",
+            "authType": "Basic",
+            "username": "",
+            "password": "",
+            "customHeaders": {
+            },
+            "customStatuses": "",
+            "postType": "raw-data",
+            "postContentType": "application/json",
+            "postValue": "",
+            "keywordType": "Exists",
+            "keywordValue": "keyword",
+            "interval": 60
+          }
+        }
+      }
+    ]
+  }
+}

@@ -10,7 +10,10 @@
       "$ref": "#/definitions/meta"
     },
     "catalog": {
-      "$ref": "#/definitions/catalog"
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/catalog"
+      }
     },
     "otk": {
       "$ref": "#/definitions/otk"
@@ -36,6 +39,7 @@
       ],
       "properties": {
         "owner": {
+          "description": "The Engineering team that is responsible for this repo.",
           "$ref": "#/definitions/owner"
         },
         "trackingId":{
@@ -43,11 +47,10 @@
         }
       }
     },
-    "owner":{
-      "description": "The Engineering team that is responsible for this repo.",
+    "owner": {
       "type": "string"
     },
-    "trackingId":{
+    "trackingId": {
       "description": "The tracking ID for the repo",
       "type": "string",
       "enum": [
@@ -55,11 +58,228 @@
         "a4da8ae0-58b3-4739-be81-9b0d6537a6c5"
       ]
     },
+    "apiVersion": {
+      "description": "The apiVersion for this entity",
+      "type": "string",
+      "enum": [
+        "backstage.io/v1alpha1",
+        "backstage.io/v1beta2"
+      ]
+    },
+    "kind":{
+      "description": "The kind for this entity",
+      "type": "string",
+      "enum": [
+        "Component",
+        "Resource",
+        "Location",
+        "API",
+        "Group",
+        "User",
+        "System",
+        "Domain"]
+    },
     "catalog": {
       "description": "The Backstage definition for this repo",
-      "type": "array",
-      "items": {
-        "type": "string"
+      "type": "object",
+      "properties": {
+        "apiVersion": {
+          "$ref": "#/definitions/apiVersion"
+        },
+        "kind":{
+          "$ref": "#/definitions/kind"
+        },
+        "metadata":{
+          "$ref": "#/definitions/metadata"
+        },
+        "spec":{
+          "$ref": "#/definitions/spec"
+        }
+      },
+      "required":[
+        "apiVersion",
+        "kind",
+        "metadata",
+        "spec"
+      ]
+    },
+    "metadata":{
+      "description": "The metadata for the Entity.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "The name of the entity",
+          "type": "string"
+        },
+        "title": {
+          "description": "The title of the entity",
+          "type": "string"
+        },
+        "description": {
+          "description": "The description of the entity",
+          "type": "string"
+        },
+        "labels": {
+          "type": "object"
+        },
+        "annotations": {
+          "type": "object"
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/links"
+          }
+        },
+        "tags": {
+          "description": "Tags that should be added to the entity. These should all be lowercase.",
+          "type":"array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required":["name","title","description"]
+    },
+    "kv": {
+      "description": "Key Value pairs of data",
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "value":{
+          "type": "string"
+        }
+      }
+    },
+    "links": {
+      "description": "Key Value pairs of data",
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        }
+      }
+    },
+    "spec": {
+      "description": "The spec of the entity. Not all fields are required but should added as needed.",
+      "type": "object",
+      "properties": {
+        "type":{
+          "description": "[Component,API,Group,Resource,Location] The type as a string, e.g. service. This field is required except for Location.",
+          "type":"string"
+        },
+        "lifecycle":{
+          "description": "[Component,API] The lifecycle state of the component, e.g. production. This field is required.",
+          "type":"string"
+        },
+        "owner": {
+          "description": "[Component,API,Resource,System,Domain] An entity reference to the owner. This field is required",
+          "$ref": "#/definitions/owner"
+        },
+        "system": {
+          "description": "[Component,API,Resource] An entity reference to the system that the component belongs to. This field is optional.",
+          "type": "string"
+        },
+        "subcomponentOf": {
+          "description": "[Component] An entity reference to another component of which the component is a part. This field is optional.",
+          "type": "string"
+        },        
+        "providesApis": {
+          "description": "[Component] An array of entity references to the APIs that are provided by the component. This field is optional.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "consumesApis": {
+          "description": "[Component] An array of entity references to the APIs that are consumed by the component. This field is optional.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "dependsOn": {
+          "description": "[Component,Resource] An array of entity references to the components and resources that the component depends on. This field is optional.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^(component|resource):.*$"
+          }
+        },
+        "definition": {
+          "description": "[API] The definition of the API, based on the format defined by spec.type. This field is required.",
+          "type": "string"
+        },
+        "profile": {
+          "description": "[Group,User] Optional profile information, mainly for display purposes. All fields of this structure are also optional.",
+          "type": "object",
+          "properties": {
+            "displayName": {
+              "description": "The Display Name",
+              "type": "string"
+            },
+            "email": {
+              "description": "The email address",
+              "type": "string"
+            },
+            "picture": {
+              "description": "A public URL to an image",
+              "type": "string"
+            }
+          }
+        },
+        "parent": {
+          "description": "[Group] The immediate parent group in the hierarchy, if any. Not all groups must have a parent. This field is optional.",
+          "type": "string"
+        },
+        "children": {
+          "description": "[Group] The immediate child groups of this group in the hierarchy (whose parent field points to this group). The list is required, but may be empty if there are no child groups.",          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "members": {
+          "description": "[Group] The users that are direct members of this group. This field is optional.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "memberOf": {
+          "description": "[User] The list of groups that the user is a direct member of (i.e., no transitive memberships are listed here). The list is required, but may be empty if the user is not member of any groups.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "dependencyOf": {
+          "description": "[Resource] An array of entity references to the components and resources that the resource is a dependency of. This field is optional.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^(component|resource):.*$"
+          }
+        },
+        "domain": {
+          "description": "[System] An entity reference to the domain that the system belongs to. This field is optional.",
+          "type": "string"
+        },
+        "target": {
+          "description": "[Location] A single target as a string. Can be either an absolute path/URL (depending on the type), or a relative path. This field is optional",
+          "type": "string"
+        },
+        "targets": {
+          "description": "[Location] A list of targets as strings. They can all be either absolute paths/URLs (depending on the type), or relative paths. This field is optional.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
       }
     },
     "otk": {
@@ -79,13 +299,25 @@
           "$ref": "#/definitions/worker_tags"
         },
         "env":{
-          "$ref": "#/definitions/env"
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/env"
+          }
         },
         "analysis":{
           "$ref": "#/definitions/analysis"
         },
         "pr":{
           "$ref": "#/definitions/pr"
+        },
+        "sonarscan":{
+          "$ref": "#/definitions/sonarscan"
+        },
+        "deploy":{
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/deploy"
+          }
         }
       }
     },
@@ -106,7 +338,8 @@
         "cron":{
           "$ref": "#/definitions/cron"
         }
-      }
+      },
+      "required":["cron"]
     },
     "cron":{
       "description": "The Cron expressions",
@@ -121,9 +354,14 @@
     },
     "env":{
       "description": "You can provide custom ENV vars which will be exported into the build shell",
-      "type": "array",
-      "items": {
-        "type": "string"
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
       }
     },
     "analysis":{
@@ -133,7 +371,8 @@
         "enabled":{
           "$ref": "#/definitions/enabled"
         }
-      }
+      },
+      "required":["enabled"]
     },
     "pr":{
       "description": "Enable or disable build checks during Pull Requests",
@@ -142,18 +381,409 @@
         "enabled":{
           "$ref": "#/definitions/enabled"
         }
+      },
+      "required":["enabled"]
+    },
+    "enabled":{
+      "type": "boolean",
+      "enum": [
+        true,
+        false
+      ]
+    },
+    "sonarscan":{
+      "description": "Scan the repository with Sonarqube for vulnerabilities",
+      "type":"boolean",
+      "enum": [
+        true,
+        false
+      ]
+    },
+    "deploy":{
+      "description": "An array of deploy definitions for the repo",
+      "type": "object",
+      "properties": {
+        "global":{
+          "$ref": "#/definitions/global"
+        },
+        "deployment":{
+          "$ref": "#/definitions/deployment"
+        },
+        "lambda":{
+          "$ref": "#/definitions/lambda"
+        },
+        "static_website":{
+          "$ref": "#/definitions/static_website"
+        },
+        "cdn":{
+          "$ref": "#/definitions/cdn"
+        },
+        "shards":{
+          "$ref": "#/definitions/shards"
+        },
+        "namespace":{
+          "$ref": "#/definitions/namespace"
+        },
+        "namespaces":{
+          "$ref": "#/definitions/namespaces"
+        },
+        "integrationtests":{
+          "$ref": "#/definitions/integrationtests"
+        },
+        "perftest":{
+          "$ref": "#/definitions/perftest"
+        },
+        "destinationrule":{
+          "$ref": "#/definitions/destinationrule"
+        },
+        "virtualservice":{
+          "$ref": "#/definitions/virtualservice"
+        }
+      },
+      "required":["global"]
+    },
+    "global":{
+      "type": "object",
+      "description": "",
+      "properties": {
+        "team":{
+          "type": "string",
+          "description": "The team that the deployment is a member of"
+        },
+        "name":{
+          "type": "string",
+          "description": "The name of the deployment"
+        },
+        "type":{
+          "type":"string",
+          "description": "The type of the deployment"
+        },
+        "org":{
+          "type":"string",
+          "description": "The github org that the deployment is a member of"
+        },
+        "lob":{
+          "type": "string",
+          "description": "The line of business for the deployment"
+        },
+        "cluster":{
+          "type": "string",
+          "description": "The cluster where the deployment should run"
+        },
+        "env":{
+          "type": "string",
+          "description": "The environment of the deployment",
+          "enum": ["dev","qa","staging","prod"]
+        },
+        "service:":{
+          "type":"object",
+          "description": "The service definitions",
+          "properties": {
+            "port":{
+              "type":"integer",
+              "description": "The port the service will listen on"
+            },
+            "adminPort":{
+              "type": "integer",
+              "description": "The admin port for the service"
+            }
+          }
+        },
+        "monitoring":{
+          "type": "object",
+          "description": "The monitoring details for the deployment",
+          "properties": {
+            "endpoint":{
+              "type": "object",
+              "description": "The endpoint details for monitoring",
+              "properties": {
+                "path":{
+                  "type": "string",
+                  "description": "The prometheus endpoint of the service"
+                },
+                "port":{
+                  "type": "string",
+                  "description": "The port where prometheus is listening"
+                },
+                "interval": {
+                  "type": "string",
+                  "description": "The interval that prometheus will monitor the endpoint"
+                }
+              }
+            },
+            "rules":{
+              "type": "array",
+              "description": "The rules that will be applied",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "required":["team","name","type"]
+    },
+    "deployment":{
+      "type": "object",
+      "description": "The deployment definition",
+      "properties": {
+        "image": {
+          "$ref": "#/definitions/deployment_image"
+        },
+        "replicaCount":{
+          "$ref": "#/definitions/deployment_replicaCount"
+        },
+        "autoscaling":{
+          "$ref": "#/definitions/deployment_autoscaling"
+        },
+        "terminationGracePeriodSeconds":{
+          "$ref": "#/definitions/deployment_terminationGracePeriodSeconds"
+        },
+        "healthcheck":{
+          "$ref": "#/definitions/deployment_healthcheck"
+        },
+        "env":{
+          "$ref": "#/definitions/deployment_env"
+        },
+        "resources":{
+          "$ref": "#/definitions/deployment_resources"
+        },
+        "nodeselector":{
+          "$ref": "#/definitions/deployment_nodeselector"
+        },
+        "tolerations":{
+          "$ref": "#/definitions/deployment_tolerations"
+        },
+        "affinity":{
+          "$ref": "#/definitions/deployment_affinity"
+        },
+        "flink":{
+          "$ref": "#/definitions/flink"
+        },
+        "job":{
+          "$ref": "#/definitions/job"
+        }
       }
+    },
+    "deployment_image":{
+      "type": "object",
+      "description": "The image declaration",
+      "properties": {
+        "cmd": {
+          "type": "string",
+          "description": "The command to run"
+        },
+        "argLine":{
+          "type": "string",
+          "description": "The command to run"
+        },
+        "args":{
+          "type": "array",
+          "description": "The command line arguments to pass",
+          "items": {
+            "type": "string"
+          }
+        },
+        "build":{
+          "type": "object",
+          "description": "The build properties",
+          "properties": {
+            "contextRoot":{
+              "type": "string",
+              "description": "The location where to build",
+              "default": "\".\""
+            }
+          }
+        }
+      }
+    },
+    "deployment_replicaCount":{
+      "type": "integer",
+      "description": "The number of replicas to deploy"
+    },
+    "deployment_autoscaling":{
+      "type": "object",
+      "description": "The autoscaling properties for the deployment",
+      "properties": {
+        "enabled":{
+          "description": "Is autoscaling enabled?",
+          "$ref": "#/definitions/enabled"
+        },
+        "minReplicas":{
+          "type": "integer",
+          "description": "The minumim number of replicas available"
+        },
+        "maxReplicas":{
+          "type": "integer",
+          "description": "The maximum number of replicas available"
+        },
+        "targetCPUUtilizationPercentage":{
+          "type": "integer",
+          "description": "The target cpu ultilization percentage to trigger autoscaling"
+        },
+        "targetMemoryUtilizationPercentage":{
+          "type": "integer",
+          "description": "The target memory utlization percentags to trigger autoscaling"
+        }
+      }
+    },
+    "deployment_terminationGracePeriodSeconds":{
+      "type": "integer",
+      "description": "The number of seconds that a pod is given to gracefully shutdown"
+    },
+    "deployment_healthcheck":{
+      "type": "object",
+      "description": "The healthcheck properties for the deployment",
+      "properties": {
+        "execCommand":{
+          "type": "array",
+          "description": "The exec commands to run for the healthcheck",
+          "items": {
+            "type": "string"
+          }
+        },
+        "path":{
+          "type": "string",
+          "description": "The path of the healthcheck"
+        },
+        "port":{
+          "type": "integer",
+          "description": "The port to use for the healthcheck"
+        },
+        "initialDelaySeconds":{
+          "type":"integer",
+          "description": "The number of seconds to delay before checking the health of the container"
+        },
+        "periodSeconds":{
+          "type":"integer",
+          "description": "The number of seconds to between healthchecks"
+        },
+        "failureThreshold":{
+          "type":"integer",
+          "description": "The number of consecutive failures to consider the container in a bad state"
+        },
+        "liveness":{
+          "type": "object",
+          "description": "The liveness probe details",
+          "properties": {
+            "execCommand":{
+              "type": "array",
+              "description": "The exec commands to run for the liveness probe",
+              "items": {
+                "type": "string"
+              }
+            },
+            "path":{
+              "type": "string",
+              "description": "The path of the liveness probe"
+            },
+            "port":{
+              "type": "integer",
+              "description": "The port to use for the liveness probe"
+            },
+            "initialDelaySeconds":{
+              "type":"integer",
+              "description": "The number of seconds to delay before checking the liveness probe of the container"
+            },
+            "periodSeconds":{
+              "type":"integer",
+              "description": "The number of seconds to between liveness probe checks"
+            },
+            "failureThreshold":{
+              "type":"integer",
+              "description": "The number of consecutive failures to consider the container in a bad state"
+            }
+          }
+        },
+        "readiness":{
+          "type": "object",
+          "description": "The readiness probe details",
+          "properties": {
+            "execCommand":{
+              "type": "array",
+              "description": "The exec commands to run for the readiness probe",
+              "items": {
+                "type": "string"
+              }
+            },
+            "path":{
+              "type": "string",
+              "description": "The path of the readiness probe"
+            },
+            "port":{
+              "type": "integer",
+              "description": "The port to use for the readiness probe"
+            },
+            "initialDelaySeconds":{
+              "type":"integer",
+              "description": "The number of seconds to delay before checking the readiness probe of the container"
+            },
+            "periodSeconds":{
+              "type":"integer",
+              "description": "The number of seconds to between readiness probe"
+            },
+            "failureThreshold":{
+              "type":"integer",
+              "description": "The number of consecutive failures to consider the container in a bad state"
+            }
+          }
+        }
+      }
+    },
+    "deployment_env":{
+      "type": "object",
+      "properties": {
+        "instance":{
+          "type": "array",
+          "items":{
+              "$ref": "#/definitions/instance_env"
+            }
+        }
+      }
+    },
+    "instance_env":{
+      "type": "object",
+      "description": "",
+      "properties": {
+        "name":{
+          "type": "string",
+          "description": "The name of theenvironment variable"
+        },
+        "value":{
+          "type": "string",
+          "description": "The value of the environment variable"
+        }
+      }
+    },
+    "deployment_resources":{
+      "$ref": "#/definitions/resources-limits-requests"
+    },
+    "deployment_nodeselector": {
+      "type": "object",
+      "description": "The node selector label"
+    },
+    "deployment_tolerations":{
+      "type": "array",
+      "description": "The array of tolerations",
+      "items": {
+        "type": "string"
+      }
+    },
+    "deployment_affinity":{
+      "type":"object",
+      "description": "The node affinity details"
     },
     "spartanzBot": {
       "description": "The SpartanzBot definition for this repo",
       "type": "object",
       "properties": {
         "fileChecker":{
-          "$ref": "#/definitions/fileChecker"
+          "$ref": "#/definitions/sb-fileChecker"
         }
-      }
+      },
+      "required":["fileChecker"]
     },
-    "fileChecker": {
+    "sb-fileChecker": {
       "description": "The SpartanzBot definition for this repo",
       "type": "object",
       "required":[
@@ -162,28 +792,883 @@
       ],
       "properties": {
         "enabled":{
+          "description": "The SpartanzBot/filechecker enabled definition for this repo",
           "$ref": "#/definitions/enabled"
         },
         "comment":{
-          "$ref": "#/definitions/comment"
+          "description": "SpartanzBot/filechecker make comment on the PR",
+          "$ref": "#/definitions/enabled"
         }
       }
     },
-    "enabled": {
-      "description": "The SpartanzBot definition for this repo",
-      "type": "boolean",
-      "enum": [
-        true,
-        false
+    "destinationrule":{
+      "type": "object",
+      "description": "The destinationrule for incoming traffic",
+      "properties": {
+        "trafficPolicy":{
+          "$ref": "#/definitions/dr-trafficPolicy"
+        }
+      }
+    },
+    "dr-trafficPolicy":{
+      "type": "object",
+      "description": "The traffic policy for incoming traffic",
+      "properties": {
+        "loadBalancer":{
+          "$ref": "#/definitions/dr-tp-loadBalancer"
+        },
+        "connectionPool":{
+          "$ref": "#/definitions/dr-tp-connectionPool"
+        },
+        "outlierDetection":{
+          "$ref": "#/definitions/dr-tp-outlierDetection"
+        }
+      }
+    },
+    "dr-tp-loadBalancer":{
+      "type": "object",
+      "description": "The load balancer properties",
+      "properties": {
+        "consistentHash":{
+          "type": "object",
+          "description": "",
+          "properties": {
+            "httpCookie":{
+              "type": "object",
+              "description": "",
+              "properties": {
+                "name":{
+                  "type": "string",
+                  "description": "The name of the cookie to use"
+                },
+                "ttl":{
+                  "type": "string",
+                  "description": "The ttl of the cookie"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "dr-tp-connectionPool":{
+      "type": "object",
+      "properties": {
+        "tcp":{
+          "type": "object",
+          "properties": {
+            "maxConnections":{
+              "type": "integer",
+              "default": 100
+            },
+            "connectTimeout":{
+              "type": "string",
+              "default": "30ms"
+            },
+            "tcpKeepalive":{
+              "type":"object",
+              "properties": {
+                "time":{
+                  "type": "string",
+                  "default": "7200s"
+                },
+                "interval":{
+                  "type": "string",
+                  "default": "75s"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "dr-tp-outlierDetection":{
+      "type": "object",
+      "properties": {
+        "consecutive5xxErrors":{
+          "type": "integer",
+          "default": 7
+        },
+        "interval":{
+          "type": "string",
+          "default": "5m"
+        },
+        "baseEjectionTime":{
+          "type": "string",
+          "default": "15m"
+        }
+      }
+    },
+    "virtualservice":{
+      "type": "object",
+      "properties": {
+        "gateway":{
+          "$ref": "#/definitions/vs-gateway"
+        },
+        "auth":{
+          "$ref": "#/definitions/vs-auth"
+        },
+        "uptimeCheck":{
+          "$ref": "#/definitions/uptimeCheck"
+        }
+      }
+    },
+    "vs-gateway":{
+      "type": "object",
+      "properties": {
+        "enabled":{
+          "$ref": "#/definitions/enabled"
+        },
+        "gateways":{
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "hosts":{
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "httpRoutes":{
+          "type":"array",
+          "items": {
+            "$ref": "#/definitions/vs-gw-httpRoutes-uri"
+          }
+        },
+        "rewrite":{
+          "type": "object",
+          "properties": {
+            "uri":{
+              "type": "string"
+            },
+            "authority":{
+              "type": "string"
+            }
+          }
+        },
+        "headers":{
+          "type": "object",
+          "properties": {
+            "request":{
+              "type": "object",
+              "properties": {
+                "set":{
+                  "type": "object",
+                  "properties": {
+                    "x-forwarded-proto":{
+                      "type": "string",
+                      "default": "https"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "timeout":{
+          "type": "object"
+        },
+        "retries":{
+          "type": "object"
+        },
+        "fault":{
+          "type": "object"
+        },
+        "corsPolicy":{
+          "type": "object",
+          "properties": {
+            "allowOrigins":{
+              "type": "array",
+                "minItems": 1,
+                "additionalItems": false,
+                "items": [{
+                  "type": "object",
+                  "properties":{
+                    "exact":{
+                      "type": "string"
+                    }
+                  }
+                }]
+              },
+            "allowMethods":{
+              "type":"array",
+              "items":{
+                "type":"string"
+              }
+            },
+            "allowHeaders":{
+              "type":"array",
+              "items":{
+                "type":"string"
+              }
+            },
+            "maxAge":{
+              "type": "string"
+            },
+            "allowCredentials":{
+              "type": "boolean"
+            }
+          }
+        },
+        "auth":{},
+        "uptimeCheck":{
+          "$ref":"#/definitions/uptimeCheck"
+        }
+      }
+    },
+    "vs-gw-httpRoutes-uri":{
+      "type": "object",
+      "properties": {
+        "uri":{
+          "type": "object",
+          "properties": {
+            "prefix":{
+              "type": "string"
+            },
+            "exact":{
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "vs-auth":{
+      "type": "object",
+      "properties": {
+        "enabled":{
+          "$ref": "#/definitions/enabled"
+        },
+        "jwt":{
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/vs-auth-jwt"
+          }
+        },
+        "policies":{
+          "$ref": "#/definitions/vs-auth-policy"
+        }
+      }
+    },
+    "vs-auth-jwt":{
+      "type": "object",
+      "properties": {
+        "issuer":{
+          "type": "string"
+        },
+        "outputPayloadToHeader":{
+          "type": "string"
+        }
+      }
+    },
+    "vs-auth-policy":{
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/vs-auth-policies"
+      }
+    },
+    "vs-auth-policies":{
+      "type": "object",
+      "properties": {
+        "action": {
+          "type": "string"
+        },
+        "rules":{
+          "type": "array",
+          "items":{
+              "$ref": "#/definitions/vs-auth-policies-to-from"
+          }
+        }
+      }
+    },
+    "vs-auth-policies-to-from":{
+      "type": "object",
+      "properties":{
+        "to":{
+          "type":"array",
+          "items": {
+            "$ref": "#/definitions/vs-auth-policies-to-operation"
+          }
+        },
+        "from":{
+          "type":"array",
+          "items": {
+            "$ref": "#/definitions/vs-auth-policies-from-source"
+          }
+        }
+      }
+    },
+    "vs-auth-policies-to-operation":{
+      "type": "object",
+      "properties":{
+        "hosts":{
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "notHosts":{
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "vs-auth-policies-from-source":{
+      "type": "object",
+      "properties": {
+        "requestPrincipals":{
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "uptimeCheck":{
+      "type": "object",
+      "properties": {
+        "enabled":{
+          "$ref": "#/definitions/enabled",
+          "default": false
+        },
+        "type":{
+          "type": "string"
+        },
+        "method":{
+          "type": "string"
+        },
+        "host":{
+          "type": "string",
+          "description": "hostname.ns or hostname.app"
+        },
+        "path":{
+          "type": "string"
+        },
+        "authType":{
+          "type": "string",
+          "enum": ["Basic","Digest"]
+        },
+        "username":{
+          "type": "string"
+        },
+        "password":{
+          "type": "string"
+        },
+        "customHeaders":{
+          "type": "object"
+        },
+        "customStatuses":{
+          "type": "string"
+        },
+        "postType:":{
+          "type": "string",
+          "enum": ["key-value","raw-data"]
+        },
+        "postContentType":{
+          "type": "string",
+          "enum": ["text/html","application/json"]
+        },
+        "postValue":{
+          "type": "string"
+        },
+        "keywordType":{
+          "type": "string",
+          "enum": ["Exists","NotExists"]
+        },
+        "keywordValue":{
+          "type": "string"
+        }
+      }
+    },
+    "lambda":{
+      "type": "object",
+      "required":["runtime","handler","packageDir"],
+      "properties": {
+        "runtime":{
+          "type": "string"
+        },
+        "handler":{
+          "type": "string"
+        },
+        "packageDir":{
+          "type": "string"
+        },
+        "batchSize":{
+          "type": "integer"
+        },
+        "maxBatchingWindowSecs":{
+          "type": "integer"
+        },
+        "bisectBatchOnError":{
+          "type": "boolean"
+        },
+        "maxRecordAgeSecs":{
+          "type": "integer"
+        },
+        "maxRetryAttempts":{
+          "type": "integer"
+        },
+        "parallelizationFactor":{
+          "type": "integer"
+        },
+        "tumblingWindowSecs":{
+          "type": "integer"
+        },
+        "deadLetterTarget":{
+          "type": "string"
+        },
+        "onFailureTarget":{
+          "type": "string"
+        },
+        "onSuccessTarget":{
+          "type": "string"
+        },
+        "reservedConcurrentExecutions":{
+          "type": "integer"
+        },
+        "resources":{
+          "$ref": "#/definitions/lambda-resources"
+        },
+        "env":{
+          "type": "object"
+        },
+        "timeout":{
+          "type": "integer"
+        },
+        "tracing":{
+          "type": "string",
+          "enum": ["PassThrough","Active"]
+        },
+        "triggers":{
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "lambda-resources":{
+      "type": "object",
+      "properties": {
+        "memoryMb":{
+          "type": "integer"
+        }
+      }
+    },
+    "flink":{
+      "type": "object",
+      "properties": {
+        "version":{
+          "type":"string"
+        },
+        "jobJar":{
+          "type":"string"
+        },
+        "parallelism":{
+          "type":"integer"
+        },
+        "plugins":{
+          "type":"array",
+          "items": {
+            "type":"string"
+          }
+        },
+        "autoSavepointSeconds":{
+          "type":"integer"
+        },
+        "takeSavepointOnUpgrade":{
+          "type":"boolean"
+        },
+        "fromSavepoint":{
+          "type":"string"
+        },
+        "isReplay":{
+          "type":"boolean"
+        },
+        "state":{
+          "type":"object",
+          "properties": {
+            "bucket":{
+              "type":"string"
+            },
+            "prefix":{
+              "type":"string"
+            }
+          }
+        },
+        "jobmanager":{
+          "$ref": "#/definitions/flink-job-task-manager"
+        }
+      }
+    },
+    "flink-job-task-manager":{
+      "type":"object",
+      "properties": {
+        "properties":{
+          "type":"object"
+        },
+        "resources":{
+          "$ref": "#/definitions/resources-limits-requests"
+        }
+      }
+    },
+    "resources-limits-requests":{
+      "type": "object",
+      "description": "The resource limits and requests",
+      "properties": {
+        "limits":{
+          "type": "object",
+          "description": "The cpu and memory limits",
+          "properties": {
+            "cpu":{
+              "type": "string",
+              "description": "The cpu limit"
+            },
+            "memory":{
+              "type": "string",
+              "description": "The memory limit"
+            }
+          }
+        },
+        "requests":{
+          "type": "object",
+          "description": "The cpu and memory requests",
+          "properties": {
+            "cpu":{
+              "type": "string",
+              "description": "The cpu request"
+            },
+            "memory":{
+              "type": "string",
+              "description": "The memory request"
+            }
+          }
+        }
+      }
+    },
+    "job":{
+      "type": "object",
+      "properties": {
+        "backoffLimit":{
+          "type":"integer"
+        },
+        "completions":{
+          "type":"integer"
+        },
+        "activeDeadlineSeconds":{
+          "type":"integer"
+        },
+        "progressDeadlineSeconds":{
+          "type":"integer"
+        },
+        "parallelism":{
+          "type":"integer"
+        },
+        "ttlSecondsAfterFinished":{
+          "type":"integer"
+        },
+        "schedule":{
+          "type":"string"
+        },
+        "startingDeadlineSeconds":{
+          "type":"integer"
+        },
+        "concurrencyPolicy":{
+          "type":"string",
+          "enum": ["Allow","Forbid","Replace"]
+        },
+        "restartPolicy":{
+          "type":"string",
+          "enum": ["Always","OnFailure","Never"]
+        }
+      }
+    },
+    "static_website":{
+      "type": "object",
+      "properties": {
+        "hosts":{
+          "$ref": "#/definitions/sw-hosts"
+        },
+        "context_root":{
+          "type":"string"
+        },
+        "rewrites":{
+          "$ref": "#/definitions/sw-rewrites"
+        },
+        "uptime_check":{
+          "$ref":"#/definitions/uptimeCheck"
+        }
+      }
+    },
+    "sw-hosts":{
+      "type":"array",
+      "items": {
+        "$ref": "#/definitions/sw-hosts-objects"
+      }
+    },
+    "sw-hosts-objects":{
+      "type":"object",
+      "properties": {
+        "subdomain":{
+          "type":"string"
+        },
+        "suffix":{
+          "type":"string"
+        },
+        "domain":{
+          "type":"string"
+        }
+      },
+      "anyOf":[
+        { 
+          "required": ["subdomain"],
+          "properties": {
+            "subdomain":{
+              "type":"string"
+            }
+          }
+        },
+        { 
+          "required": ["domain"],
+          "properties": {
+            "domain":{
+              "type":"string"
+            }
+          }
+        }
       ]
     },
-    "comment": {
-      "description": "The SpartanzBot comment to make on the PR",
-      "type": "boolean",
-      "enum": [
-        true,
-        false
-      ]
-    }
+    "sw-rewrites":{
+      "type":"array",
+      "items":{
+        "$ref": "#/definitions/sw-rewrites-objects"
+      }
+    },
+    "sw-rewrites-objects":{
+      "type": "object",
+      "properties": {
+        "uri":{
+          "type":"object",
+          "properties": {
+            "prefix":{
+              "type":"string"
+            },
+            "exact":{
+              "type":"string"
+            }
+          }
+        },
+        "rewrite":{
+          "type":"object",
+          "properties": {
+            "uri":{
+              "type":"string"
+            }
+          }
+        }
+      }
+    },
+    "cdn":{
+      "type": "object",
+      "required":["local_dir","prefix"],
+      "properties": {
+        "local_dir":{
+          "type":"string"
+        },
+        "prefix":{
+          "type":"string"
+        },
+        "version":{
+          "type":"string",
+          "enum": ["from_package_json","generated"],
+          "default": "generated"
+        }
+      }
+    },
+    "shards":{
+      "type": "object"
+    },
+    "namespace":{
+      "type": "object",
+      "properties": {
+        "config":{
+          "type":"object",
+          "description": "mounted into pods at /config/*"
+        },
+        "env":{
+          "type": "object",
+          "description": "Key/Value pairs of data"
+        },
+        "lambda":{
+          "type": "object",
+          "properties": {
+            "env":{
+              "type":"object",
+              "description": "Key/Value pairs of data"
+            }
+          }
+        },
+        "staticAppSettings":{
+          "$ref": "#/definitions/ns-static-app-settings"
+        },
+        "cloudfront":{
+          "$ref": "#/definitions/cloudfront"
+        },
+        "dns":{
+          "$ref": "#/definitions/dns"
+        },
+        "egress":{
+          "$ref": "#/definitions/egress"
+        },
+        "limits":{
+          "$ref": "#/definitions/ns-limits"
+        },
+        "services":{
+          "$ref": "#/definitions/ns-services"
+        }
+      }
+    },
+    "ns-static-app-settings":{
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/ns-static-app-settings-object"
+      }
+    },
+    "ns-static-app-settings-object":{
+      "type": "object",
+      "properties": {
+        "name":{
+          "type":"string"
+        },
+        "settings":{
+          "$ref": "#/definitions/ns-static-app-settings-object-settings"
+        }
+      }
+    },
+    "ns-static-app-settings-object-settings":{
+      "type":"array",
+      "items": {
+        "$ref": "#/definitions/kv"
+      }
+    },
+    "cloudfront":{
+      "type": "object",
+      "properties": {
+        "defaultOrigin":{
+          "type":"string"
+        },
+        "defaultRootObject":{
+          "type":"string"
+        },
+        "redirect404sToIndex":{
+          "type":"boolean"
+        },
+        "origins":{
+          "type":"object",
+          "properties": {
+            "api":{
+              "type":"object",
+              "properties": {
+                "pathPattern":{
+                  "type":"string"
+                },
+                "connectionTimeout":{
+                  "type":"integer"
+                },
+                "readTimeout":{
+                  "type":"integer"
+                },
+                "lambdas":{
+                  "type":"array",
+                  "items": {
+                    "type":"string"
+                  }
+                },
+                "cachePolicy":{
+                  "type":"string"
+                },
+                "originRequestPolicy":{
+                  "type":"string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "dns":{
+      "type":"object",
+      "properties": {
+        "app":{
+          "type":"object",
+          "properties": {
+            "additionalDomains":{
+              "type":"array",
+              "items": {
+                "type":"string"
+              }
+            },
+            "rootDomain":{
+              "type":"string",
+              "default": "-app.wna.cloud",
+              "enum": ["edgenuityapp.com","il-apps.com","-app.wna.cloud"]
+            }
+          }
+        }
+      }
+    },
+    "egress":{
+      "type":"object",
+      "properties": {
+        "outboundTrafficPolicy":{
+          "type":"string"
+        }
+      }
+    },
+    "ns-limits":{
+      "type":"object",
+      "properties": {
+        "cpu":{
+          "type":"object",
+          "properties": {
+            "defaults":{
+              "type": "object",
+              "properties": {
+                "max":{
+                  "type":"integer"
+                },
+                "request":{
+                  "type":"integer"
+                }
+              }
+            }
+          }
+        },
+        "memory":{
+          "type":"object",
+          "properties": {
+            "defaults":{
+              "type": "object",
+              "properties": {
+                "max":{
+                  "type":"string"
+                },
+                "request":{
+                  "type":"string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "ns-services":{},
+    "ns-services-elasticsearch":{},
+    "namespaces":{},
+    "integrationtests":{},
+    "perftest":{}
   }
 }

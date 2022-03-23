@@ -1,0 +1,21 @@
+{
+  "version": "1.0",
+  "otk": {
+    "deploy": [
+      {
+        "global": {
+          "team": "team",
+          "name": "name",
+          "type": "namespace",
+          "org": "org",
+          "lob": "lob",
+          "cluster": "cluster",
+          "env": "env"
+        },
+        "namespace": {
+          
+        }
+      }
+    ]
+  }
+}
